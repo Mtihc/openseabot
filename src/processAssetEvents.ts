@@ -13,14 +13,16 @@ async function processAssetEvents(collectionSlug: string, store: IStore, messeng
     offset: 0,
     limit: 100,
     only_opensea: false,
-    occurred_after: lastTimestamp + 1,
+    occurred_after: lastTimestamp ? lastTimestamp + 1 : undefined,
   });
   if (asset_events.length === 0) {
     console.info("No new asset events to process.");
     return;
   }
 
-  await messenger.sendAssetEventMessages(asset_events);
+  if (!!lastTimestamp) {
+    await messenger.sendAssetEventMessages(asset_events);
+  }
 
   if (asset_events[0].transaction?.timestamp) {
     lastTimestamp = moment.utc(asset_events[0].transaction?.timestamp).unix();
