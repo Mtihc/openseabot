@@ -19,13 +19,14 @@ docker create --name openseabot-process-asset-events \
        openseabot:latest \
        yarn run process-asset-events
        
-docker start openseabot-process-asset-events --attach >>logs/openseabot-process-asset-events.log 2>&1
+docker start openseabot-process-asset-events --attach
 ```
 
 Run it in a cron job, like at every hour:
 
 ```shell
-crontab -e
+sudo touch /var/log/openseabot-process-asset-events.log
+sudo crontab -e
 
-0 * * * * docker start openseabot-process-asset-events >>logs/openseabot-process-asset-events.log 2>&1
+0 * * * * docker start openseabot-process-asset-events >>/var/log/openseabot-process-asset-events.log 2>&1
 ```
