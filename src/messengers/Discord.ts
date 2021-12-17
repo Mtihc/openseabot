@@ -106,6 +106,10 @@ class Discord implements IMessenger {
                 accountField("Seller", assetEvent.seller),
             ));
       case "transfer":
+        if (assetEvent.to_account.address === "0x7be8076f4ea4a4ad08075c2508e481d6c946d12b") {
+          // skip these mysterious transfers to OpenSea-Orders that come after every sale
+          return undefined;
+        }
         if (assetEvent.from_account.address === "0x0000000000000000000000000000000000000000") {
           return withDefaults(new MessageEmbed()
               .setColor("#ff9800")
