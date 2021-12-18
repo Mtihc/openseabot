@@ -1,4 +1,5 @@
 import "dotenv/config";
+import path from "path";
 import * as moment from "moment";
 import Discord from "./messengers/Discord";
 import IMessenger from "./messengers/IMessenger";
@@ -36,9 +37,11 @@ async function main(): Promise<void> {
   if (!process.env.OPENSEA_COLLECTION_SLUG) {
     throw new Error(`Missing required environment variable OPENSEA_COLLECTION_SLUG`);
   }
-  const store = new FileStore(process.env.DATA_FILE_PATH || "data/data.json");
-  const messenger = new Discord();
-  await processAssetEvents(process.env.OPENSEA_COLLECTION_SLUG, store, messenger);
+  await processAssetEvents(
+      process.env.OPENSEA_COLLECTION_SLUG,
+      new FileStore(path.join(process.env.DATA_DIR || "data", "data.json")),
+      new Discord()
+  );
 }
 
 main()
